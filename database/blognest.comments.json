@@ -1,0 +1,150 @@
+[{
+  "_id": {
+    "$oid": "68773b7dffdcf9b6f6a22a0c"
+  },
+  "postId": {
+    "$type": "objectId",
+    "$required": true
+  },
+  "author": {
+    "id": {
+      "$type": "objectId",
+      "$required": true
+    },
+    "name": {
+      "$type": "string",
+      "$required": true
+    }
+  },
+  "text": {
+    "$type": "string",
+    "$required": true
+  },
+  "createdAt": {
+    "$type": "date"
+  },
+  "updatedAt": {
+    "$type": "date"
+  }
+},
+{
+  "_id": {
+    "$oid": "68773cbfffdcf9b6f6a22a1a"
+  },
+  "postId": {
+    "$oid": "64dbe2b2f85f4c1a3cefb001"
+  },
+  "author": {
+    "id": {
+      "$oid": "64dbe0a2f85f4c1a3cefa999"
+    },
+    "name": "Sakshi Yadav"
+  },
+  "text": "This post really helped me understand markdown basics. Thanks!",
+  "createdAt": {
+    "$date": "2025-07-16T12:45:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-16T12:45:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "687a6975cf4e56c5898faa6f"
+  },
+  "postId": {
+    "$oid": "687a651bcf4e56c5898faa27"
+  },
+  "authorId": {
+    "$oid": "687a5e0bcf4e56c5898faa0f"
+  },
+  "authorName": "johnn doe",
+  "text": "good post..",
+  "createdAt": {
+    "$date": "2025-07-18T15:34:13.240Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-18T15:34:13.240Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "687a6df2cf4e56c5898faa82"
+  },
+  "postId": {
+    "$oid": "687a6d8ccf4e56c5898faa79"
+  },
+  "authorId": {
+    "$oid": "6878cb1a4b0da285adb11117"
+  },
+  "authorName": "admin",
+  "text": "First comment for testing",
+  "createdAt": {
+    "$date": "2025-07-18T15:53:22.093Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-18T15:53:22.093Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "687a7037cf4e56c5898faa98"
+  },
+  "postId": {
+    "$oid": "68773be4ffdcf9b6f6a22a17"
+  },
+  "authorId": {
+    "$oid": "6878cb1a4b0da285adb11117"
+  },
+  "authorName": "admin",
+  "text": "this post is really good!!",
+  "createdAt": {
+    "$date": "2025-07-18T16:03:03.936Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-18T16:03:03.936Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "687dc21faba65155dffafef2"
+  },
+  "postId": {
+    "$oid": "687dc1c8aba65155dffafeed"
+  },
+  "authorId": {
+    "$oid": "687dc093aba65155dffafedc"
+  },
+  "authorName": "pranika",
+  "text": "first post",
+  "createdAt": {
+    "$date": "2025-07-21T04:29:19.314Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-21T04:29:19.314Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "687dcd2b5de5319d72ad7218"
+  },
+  "postId": {
+    "$oid": "687dc1c8aba65155dffafeed"
+  },
+  "authorId": {
+    "$oid": "687dc093aba65155dffafedc"
+  },
+  "authorName": "pranika",
+  "text": "good",
+  "createdAt": {
+    "$date": "2025-07-21T05:16:27.193Z"
+  },
+  "updatedAt": {
+    "$date": "2025-07-21T05:16:27.193Z"
+  },
+  "__v": 0
+}]

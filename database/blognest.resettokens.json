@@ -1,0 +1,26 @@
+[{
+  "_id": {
+    "$oid": "68773b93ffdcf9b6f6a22a0f"
+  },
+  "email": {
+    "$type": "string",
+    "$required": true
+  },
+  "token": {
+    "$type": "string",
+    "$required": true
+  },
+  "createdAt": {
+    "$type": "date"
+  }
+},
+{
+  "_id": {
+    "$oid": "68773cd6ffdcf9b6f6a22a1d"
+  },
+  "email": "sakshi@example.com",
+  "token": "ab12cd34ef56789012345678reset",
+  "createdAt": {
+    "$date": "2025-07-16T13:00:00.000Z"
+  }
+}]
