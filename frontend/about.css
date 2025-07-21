@@ -1,0 +1,172 @@
+/* Base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background-color: #0f172a;
+  color: #f1f5f9;
+  line-height: 1.7;
+}
+
+/* Header */
+.header {
+  background-color: #1e293b;
+  padding: 1.5rem 2rem;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.logo {
+  font-size: 2rem;
+  color: #38bdf8;
+  font-weight: bold;
+}
+
+/* Hero Section */
+.about-hero {
+  padding: 4rem 2rem;
+  background: radial-gradient(circle, #0f172a 100%);
+  text-align: center;
+}
+
+.about-hero h2 {
+  font-size: 2.2rem;
+  color: #38bdf8;
+  margin-bottom: 1.2rem;
+}
+
+.about-hero p {
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 1rem;
+  color: #cbd5e1;
+}
+
+/* Team / Mission Section */
+.team {
+  padding: 3rem 2rem;
+  background-color: #1e293b;
+}
+
+.team h3 {
+  color: #f8fafc;
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+}
+
+.team p {
+  color: #cbd5e1;
+  margin-bottom: 1.5rem;
+  max-width: 800px;
+}
+
+.features-list {
+  list-style-type: disc;
+  color: #cbd5e1;
+  padding-left: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.features-list li {
+  margin-bottom: 0.5rem;
+}
+
+/* Footer */
+footer {
+  background-color: #1e293b;
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #94a3b8;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .about-hero h2 {
+    font-size: 1.7rem;
+  }
+
+  .team h3 {
+    font-size: 1.3rem;
+  }
+
+  .logo {
+    font-size: 1.6rem;
+  }
+
+  .about-hero p,
+  .team p {
+    font-size: 0.95rem;
+  }
+}
+.about-creator {
+  background-color: #1e293b;
+  padding: 4rem 2rem;
+  color: #f8fafc;
+  text-align: center;
+}
+
+.about-creator h2 {
+  font-size: 2rem;
+  color: #38bdf8;
+  margin-bottom: 2rem;
+}
+
+.creator-card {
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: #0f172a;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(56, 189, 248, 0.1);
+  text-align: left;
+}
+
+.creator-text p {
+  margin-bottom: 1.2rem;
+  line-height: 1.7;
+  font-size: 1rem;
+  color: #cbd5e1;
+}
+
+.creator-text strong {
+  color: #f8fafc;
+}
+
+.creator-links {
+  margin-top: 1.4rem;
+  padding-bottom: 3rem;
+}
+
+.creator-links a {
+  display: inline-block;
+  margin-right: 3rem;
+  margin-left: 3rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  background-color: #38bdf8;
+  color: #0f172a;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.creator-links a:hover {
+  background-color: #0ea5e9;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .creator-text {
+    font-size: 0.95rem;
+  }
+
+  .creator-links a {
+    display: block;
+    margin-bottom: 4rem;
+  }
+}

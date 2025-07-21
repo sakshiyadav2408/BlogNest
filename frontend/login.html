@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login – Blog Nest</title>
+  <link rel="stylesheet" href="login.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <div class="form-box">
+      <h1 class="logo">🪄 Blog Nest</h1>
+      <h2>Login to your account</h2>
+
+      <form id="loginForm">
+        <div class="input-group">
+          <label for="email">📧 Email</label>
+          <input type="email" id="email" placeholder="you@example.com" required />
+        </div>
+        <div class="input-group">
+          <label for="password">🔑 Password</label>
+          <input type="password" id="password" placeholder="••••••••" required />
+        </div>
+
+        <!-- hidden radio keeps old JS from crashing if you query name="role" -->
+        <input type="radio" name="role" value="user" hidden checked />
+
+        <button type="submit" class="btn">Login</button>
+        <p class="signup-text">Forgot password? <a href="forgot-password.html">Reset</a></p>
+        <p class="signup-text">Don’t have an account? <a href="signup.html">Sign up</a></p>
+      </form>
+    </div>
+  </div>
+
+ <script>
+  const emailInput = document.getElementById('email');
+  const passwordInput = document.getElementById('password');
+
+  document.getElementById("loginForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const email = emailInput.value.trim();
+    const password = passwordInput.value.trim();
+
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      console.log("Status:", res.status);
+      console.log("Response:", data);
+
+      if (res.ok) {
+        localStorage.setItem("user", JSON.stringify(data.user));
+        localStorage.setItem("userId", data.user.id); // ✅ This line stores the userId
+        localStorage.setItem("jwt", data.token);
+
+        if (data.user.isAdmin) {
+          window.location.href = "admin-panel.html";
+        } else {
+          window.location.href = "profile.html";
+        }
+      } else {
+        alert(data.error || "Login failed");
+      }
+    } catch (err) {
+      console.error("Network error:", err);
+      alert("Something went wrong. Please try again.");
+    }
+  });
+</script>
+
+
+  
+</body>
+</html>

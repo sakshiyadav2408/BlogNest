@@ -1,0 +1,137 @@
+body {
+  margin: 0;
+  font-family: 'Outfit', sans-serif;
+  background-color: #0f172a;
+  color: #f1f5f9;
+}
+
+.navbar {
+  background-color: #1e293b;
+  color: #f8fafc;
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  align-items: center;
+  border-bottom: 1px solid #334155;
+}
+
+.logo {
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+.nav-link {
+  color: #cbd5e1;
+  margin-left: 1rem;
+  text-decoration: none;
+}
+
+.editor-container {
+  display: flex;
+  height: calc(100vh - 70px);
+}
+
+.editor-panel, .preview-panel {
+  width: 50%;
+  padding: 1rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.editor-panel textarea {
+  flex: 1;
+  padding: 1rem;
+  font-family: 'Fira Code', monospace;
+  font-size: 1rem;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  resize: none;
+  background-color: #1e293b;
+  color: #f1f5f9;
+}
+
+.preview-box {
+  flex: 1;
+  padding: 1rem;
+  background-color: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  overflow-y: auto;
+}
+
+.preview-box pre code {
+  background-color: #0f172a;
+  padding: 0.75rem;
+  display: block;
+  border-radius: 5px;
+  overflow-x: auto;
+}
+
+.btn-group {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.btn-group button {
+  background-color: #0ea5e9;
+  color: white;
+  border: none;
+  padding: 0.6rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-group button:hover {
+  background-color: #0369a1;
+}
+.input-label {
+  font-weight: 600;
+  margin-top: 1rem;
+  margin-bottom: 0.3rem;
+  color: #94a3b8;
+}
+
+.input-field {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  background-color: #1e293b;
+  color: white;
+  font-family: 'Outfit', sans-serif;
+  margin-bottom: 1rem;
+}
+
+.comment-section {
+  margin-top: 0rem;
+  
+  padding-top: 0rem;
+}
+
+.comment-box {
+  width: 100%;
+  height: 100px;
+  padding: 0.6rem;
+  border-radius: 6px;
+  background-color: #1e293b;
+  color: white;
+  border: 1px solid #334155;
+  font-family: 'Outfit', sans-serif;
+  resize: vertical;
+}
+
+.comment-btn {
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #4ade80;
+  border: none;
+  border-radius: 6px;
+  color: black;
+  font-weight: 600;
+  cursor: not-allowed;
+}

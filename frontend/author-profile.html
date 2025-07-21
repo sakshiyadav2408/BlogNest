@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Author Profile – Blog Nest</title>
+  <link rel="stylesheet" href="profile.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">🪄 Blog Nest</div>
+    <nav class="nav-links">
+      <a href="profile.html" class="btn">🏠 Dashboard</a>
+      <a href="index.html" class="btn logout">Logout</a>
+    </nav>
+  </header>
+
+  <main class="profile-container">
+    <section class="user-summary">
+      <h2 id="welcomeUser">Welcome, Developer!</h2>
+      <p>This is your author profile. Here are all the blogs you've published.</p>
+    </section>
+
+    <section class="search-create">
+      <a href="markdown-editor.html" class="btn create">➕ Create Post</a>
+    </section>
+
+    <section class="recent-posts">
+      <h3>📝 Your Posts</h3>
+      <div id="authorPosts"></div>
+    </section>
+  </main>
+
+  <script>
+    const token = localStorage.getItem("jwt");
+    const authorId = localStorage.getItem("userId");
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      if (!authorId) {
+        alert("User ID not found. Please log in again.");
+        location.href = "login.html";
+        return;
+      }
+
+      try {
+        const res = await fetch(`http://localhost:5000/api/posts/user/${authorId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const posts = await res.json();
+        if (!res.ok) return alert(posts.error || "Failed to load posts");
+
+        const container = document.getElementById("authorPosts");
+        if (!posts.length) {
+          container.innerHTML = "<p>No posts yet. Go create one!</p>";
+          return;
+        }
+
+        posts.forEach(post => {
+          const postEl = document.createElement("div");
+          postEl.classList.add("post-card");
+          postEl.innerHTML = `
+            <h2>${post.title}</h2>
+            <p><strong>Tags:</strong> ${post.tags.join(", ")}</p>
+            <div>${post.html}</div>
+
+            <div class="comment-section">
+              <h4>🗨️ Comments</h4>
+              <div class="comments" id="comments-${post._id}">Loading comments…</div>
+              <textarea class="comment-input" id="input-${post._id}" placeholder="Add a comment..."></textarea>
+              <button class="btn comment-btn" onclick="addComment('${post._id}')">Post Comment</button>
+            </div>
+
+            <button class="btn" onclick="editPost('${encodeURIComponent(JSON.stringify(post))}')">✏️ Edit</button>
+           
+            <hr />
+          `;
+
+          container.appendChild(postEl);
+          loadComments(post._id);
+        });
+      } catch (err) {
+        console.error("Error loading author posts:", err);
+      }
+    });
+
+    function editPost(postJSON) {
+      const post = JSON.parse(decodeURIComponent(postJSON));
+      localStorage.setItem("editingPost", JSON.stringify(post));
+      window.location.href = "markdown-editor.html";
+    }
+
+  
+
+    async function loadComments(postId) {
+      const commentBox = document.getElementById(`comments-${postId}`);
+      try {
+        const res = await fetch(`http://localhost:5000/api/posts/${postId}/comments`);
+        const comments = await res.json();
+
+        if (!res.ok) throw comments;
+
+        if (!comments.length) {
+          commentBox.innerHTML = "<p></p>";
+        } else {
+          commentBox.innerHTML = comments.map(c => `
+            <div class="comment">
+              <p><strong>${c.authorName}</strong>: ${c.text}</p>
+            </div>
+          `).join("");
+        }
+      } catch (err) {
+        commentBox.innerHTML = "<p class='error'>Failed to load comments.</p>";
+      }
+    }
+
+    async function addComment(postId) {
+      const input = document.getElementById(`input-${postId}`);
+      const text = input.value.trim();
+      if (!text) return alert("Comment cannot be empty.");
+
+      try {
+        const res = await fetch(`http://localhost:5000/api/posts/${postId}/comments`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          },
+          body: JSON.stringify({ text })
+        });
+
+        const result = await res.json();
+        if (!res.ok) throw result;
+
+        input.value = "";
+        loadComments(postId);
+      } catch (err) {
+        alert(err.error || "Failed to post comment.");
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel - Blog Nest</title>
+  <link rel="stylesheet" href="admin-panel.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="admin-container">
+    <aside class="sidebar">
+      <h1 class="logo">🪄 Blog Nest</h1>
+      <nav class="menu">
+        <a href="#" class="active">📊 Dashboard</a>
+        <a href="admin-posts.html">📝 Posts</a>
+        <a href="admin-users.html">👥 Users</a>
+        <a href="index.html">🚪 Logout</a>
+      </nav>
+    </aside>
+
+    <main class="main-panel">
+      <header class="admin-header">
+        <h2>Welcome Admin</h2>
+        <p>Manage posts, users, comments and more...</p>
+      </header>
+
+      <section class="cards">
+        <div class="card">
+          <h3>Total Posts</h3>
+          <p id="totalPosts">Loading...</p>
+        </div>
+        <div class="card">
+          <h3>Total Users</h3>
+          <p id="totalUsers">Loading...</p>
+        </div>
+        <div class="card">
+          <h3>Total Comments</h3>
+          <p id="totalComments">Loading...</p>
+        </div>
+        <div class="card">
+          <h3>Total Tags</h3>
+          <p id="totalTags">Loading...</p>
+        </div>
+      </section>
+
+      <section class="recent">
+        <h3>🕒 Recent Activity</h3>
+        <ul id="recentActivity">
+          <li>Loading recent activities...</li>
+        </ul>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const token = localStorage.getItem("jwt");
+      if (!token) return alert("Admin not logged in");
+
+      try {
+        const res = await fetch("http://localhost:5000/api/admin/stats", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) return alert(data.error || "Failed to load admin stats");
+
+        document.getElementById("totalPosts").textContent = data.totalPosts;
+        document.getElementById("totalUsers").textContent = data.totalUsers;
+        document.getElementById("totalComments").textContent = data.totalComments;
+        document.getElementById("totalTags").textContent = data.totalTags;
+
+        // Optional: show recent activity list
+        const recent = document.getElementById("recentActivity");
+        recent.innerHTML = "";
+        if (data.recent.length === 0) {
+          recent.innerHTML = "<li>No recent activity.</li>";
+        } else {
+          data.recent.forEach(item => {
+            const li = document.createElement("li");
+            li.innerHTML = item;
+            recent.appendChild(li);
+          });
+        }
+
+      } catch (err) {
+        console.error("Error loading stats:", err);
+      }
+    });
+  </script>
+</body>
+</html>

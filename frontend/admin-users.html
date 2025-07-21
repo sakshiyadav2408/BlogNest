@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manage Users - Blog Nest Admin</title>
+  <link rel="stylesheet" href="admin-shared.css" />
+</head>
+<body>
+  <aside class="sidebar">
+    <h1 class="logo">🪄 Blog Nest</h1>
+    <nav>
+      <a href="admin-panel.html">📊 Dashboard</a>
+      <a href="admin-posts.html">📝 Posts</a>
+      <a class="active" href="admin-users.html">👤 Users</a>
+      <a href="index.html">🚪 Logout</a>
+    </nav>
+  </aside>
+
+  <main class="main-panel">
+    <h2>Manage Users</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Joined</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="userTable">
+        <!-- Users loaded here -->
+      </tbody>
+    </table>
+  </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const token = localStorage.getItem("jwt"); // ✅ Corrected key
+
+      if (!token) {
+        alert("Unauthorized. Please log in.");
+        window.location.href = "login.html";
+        return;
+      }
+
+      try {
+        const res = await fetch("http://localhost:5000/api/admin/users", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!res.ok) throw new Error("Unauthorized");
+
+        const users = await res.json();
+        const tableBody = document.getElementById("userTable");
+        tableBody.innerHTML = "";
+
+        users.forEach((user) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${user.name}</td>
+            <td>${user.email}</td>
+            <td>${user.isAdmin ? "Admin" : "User"}</td>
+            <td>${new Date(user.createdAt).toLocaleDateString()}</td>
+            <td>
+             
+              <button onclick="deleteUser('${user._id}')">Delete</button>
+            </td>
+          `;
+          tableBody.appendChild(row);
+        });
+      } catch (err) {
+        console.error(err);
+        alert("Unauthorized. Please log in.");
+        window.location.href = "login.html";
+      }
+    });
+
+    async function promoteUser(userId) {
+      const token = localStorage.getItem("jwt");
+
+      try {
+        const res = await fetch(`http://localhost:5000/api/admin/users/${userId}/promote`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const result = await res.json();
+        if (!res.ok) return alert(result.error || "Failed to promote user");
+
+        alert("User promoted successfully.");
+        location.reload();
+      } catch (err) {
+        console.error(err);
+        alert("Failed to promote user.");
+      }
+    }
+
+    async function deleteUser(userId) {
+      const token = localStorage.getItem("jwt");
+
+      try {
+        const res = await fetch(`http://localhost:5000/api/admin/users/${userId}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const result = await res.json();
+        if (!res.ok) return alert(result.error || "Failed to delete user");
+
+        alert("User deleted successfully.");
+        location.reload();
+      } catch (err) {
+        console.error(err);
+        alert("Failed to delete user.");
+      }
+    }
+  </script>
+</body>
+</html>

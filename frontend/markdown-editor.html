@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Markdown Editor – Blog Nest</title>
+  <link rel="stylesheet" href="markdown-editor.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">🪄 Blog Nest</div>
+    <nav>
+      <a href="author-profile.html" class="nav-link">🏠 Profile</a>
+      <a href="index.html" class="nav-link">🌐 Home</a>
+    </nav>
+  </header>
+
+  <main class="editor-container">
+    <!-- ========= Left panel ========= -->
+    <section class="editor-panel">
+      <label class="input-label" for="postTitle">📝 Post Title</label>
+      <input  class="input-field" id="postTitle" placeholder="Enter title…"/>
+
+      <label class="input-label" for="tags">🏷️ Tags (comma‑separated)</label>
+      <input  class="input-field" id="tags" placeholder="html,css,javascript, node.js"/>
+
+      <h2>✍️ Markdown Input</h2>
+      <textarea id="markdownInput" placeholder="# Hello Blog Nest…"></textarea>
+    </section>
+
+    <!-- ========= Right panel ========= -->
+    <section class="preview-panel">
+     
+      <label class="input-label" for="comment">🗨️ Comment</label>
+      <textarea class="input-field" id="comment" placeholder="Write a comment…"></textarea>
+       
+      <h2>🌐 HTML Preview</h2>
+      <div id="htmlPreview" class="preview-box"></div>
+
+      <div class="btn-group">
+        <button id="btnPost">🚀 Post</button>
+        <button id="btnCopy">📋 Copy HTML</button>
+        <button id="btnDLHtml">⬇️ Download .html</button>
+        <button id="btnDLMD">⬇️ Download .md</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========== Libraries ========== -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+  <!-- ========== Script ========== -->
+  <script>
+    // Elements
+    const titleInput  = document.getElementById('postTitle');
+    const tagsInput   = document.getElementById('tags');
+    const commentInput = document.getElementById('comment');
+    const mdInput     = document.getElementById('markdownInput');
+    const htmlPreview = document.getElementById('htmlPreview');
+
+    const btnPost   = document.getElementById('btnPost');
+    const btnCopy   = document.getElementById('btnCopy');
+    const btnDLHtml = document.getElementById('btnDLHtml');
+    const btnDLMD   = document.getElementById('btnDLMD');
+
+    // Configure marked + highlight.js
+    marked.setOptions({ highlight: (c,l)=>hljs.highlightAuto(c,[l]).value });
+
+    // Live preview
+    function render() {
+      htmlPreview.innerHTML = marked.parse(mdInput.value || '');
+    }
+    mdInput.addEventListener('input', render);
+    window.addEventListener('DOMContentLoaded', render);
+
+    /* ---------------- POST ---------------- */
+    btnPost.addEventListener('click', async () => {
+      const title    = titleInput.value.trim();
+      const markdown = mdInput.value.trim();
+      const comment  = commentInput.value.trim();
+
+      if (!title || !markdown) return alert('⛔ Title & Markdown required');
+
+      const html  = marked.parse(markdown);
+      const tags  = tagsInput.value.split(',').map(t=>t.trim()).filter(Boolean);
+      const token = localStorage.getItem('jwt');
+
+      const postPayload = { title, markdown, html, tags };
+      if (comment) postPayload.comment = comment;
+
+      try {
+        if (token) {
+          const res = await fetch('http://localhost:5000/api/posts', {
+            method:'POST',
+            headers:{
+              'Content-Type':'application/json',
+              'Authorization':'Bearer '+token
+            },
+            body: JSON.stringify(postPayload)
+          });
+          if (!res.ok) throw await res.json();
+          alert('✅ Post saved to database');
+        } else {
+          const posts = JSON.parse(localStorage.getItem('posts')||'[]');
+          posts.unshift({
+            id: Date.now(),
+            title,
+            markdown,
+            html,
+            tags,
+            comment,
+            createdAt: new Date()
+          });
+          localStorage.setItem('posts', JSON.stringify(posts));
+          alert('✅ Post stored locally (no backend token)');
+        }
+        location.href = 'author-profile.html';
+      } catch (err) {
+        console.error(err);
+        alert(err.error || 'Post failed');
+      }
+    });
+
+    /* ---------------- COPY HTML ---------------- */
+    btnCopy.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(htmlPreview.innerHTML);
+        alert('📋 Copied to clipboard');
+      } catch {
+        const tmp = document.createElement('textarea');
+        tmp.value = htmlPreview.innerHTML; document.body.appendChild(tmp);
+        tmp.select(); document.execCommand('copy'); document.body.removeChild(tmp);
+        alert('📋 Copied');
+      }
+    });
+
+    /* ---------------- DOWNLOAD .HTML ---------------- */
+    btnDLHtml.addEventListener('click', () => {
+      const blob = new Blob([htmlPreview.innerHTML], { type:'text/html' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = (titleInput.value.trim()||'post') + '.html';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+
+    /* ---------------- DOWNLOAD .MD ---------------- */
+    btnDLMD.addEventListener('click', () => {
+      const blob = new Blob([mdInput.value], { type:'text/markdown' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = (titleInput.value.trim()||'post') + '.md';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+  </script>
+
+</body>
+</html>
